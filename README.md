@@ -1,9 +1,17 @@
-# Realtime API Agents Demo
+# Realtime API Agents Demo with Avatar Integration
 
-This is a demonstration of more advanced patterns for voice agents, using the OpenAI Realtime API and the OpenAI Agents SDK. 
+This is a demonstration of advanced voice agent patterns with **visual avatar integration**, combining the OpenAI Realtime API, OpenAI Agents SDK, and HeyGen Streaming Avatar SDK for a complete conversational AI experience. 
 
-## About the OpenAI Agents SDK
+## Key Features
 
+### 🎭 Visual Avatar Integration
+This demo includes **HeyGen Streaming Avatar SDK** integration, providing a visual AI assistant with:
+- **Lip-synced video avatars** that respond in real-time
+- **Dual-mode architecture**: Toggle between voice-only or avatar mode
+- **Seamless integration**: OpenAI handles intelligence, HeyGen provides the visual representation
+- **Live demo**: Mario from Cocoa AI, an AI consultant avatar
+
+### 🤖 OpenAI Agents SDK
 This project uses the [OpenAI Agents SDK](https://github.com/openai/openai-agents-js), a toolkit for building, managing, and deploying advanced AI agents. The SDK provides:
 
 - A unified interface for defining agent behaviors and tool integrations.
@@ -15,17 +23,40 @@ For full documentation, guides, and API references, see the official [OpenAI Age
 
 **NOTE:** For a version that does not use the OpenAI Agents SDK, see the [branch without-agents-sdk](https://github.com/openai/openai-realtime-agents/tree/without-agents-sdk).
 
-There are two main patterns demonstrated:
-1. **Chat-Supervisor:** A realtime-based chat agent interacts with the user and handles basic tasks, while a more intelligent, text-based supervisor model (e.g., `gpt-4.1`) is used extensively for tool calls and more complex responses. This approach provides an easy onramp and high-quality answers, with a small increase in latency.
-2. **Sequential Handoff:** Specialized agents (powered by realtime api) transfer the user between them to handle specific user intents. This is great for customer service, where user intents can be handled sequentially by specialist models that excel in a specific domains. This helps avoid the model having all instructions and tools in a single agent, which can degrade performance.
+## Agent Patterns Demonstrated
+
+### 1. Chat-Supervisor with Avatar (Featured Demo)
+The default **Cocoa AI** demo showcases:
+- **Mario**, an AI consultant avatar powered by HeyGen
+- Realtime chat agent handles immediate responses and basic tasks
+- Text-based supervisor model (`gpt-4.1`) handles complex queries via tool calls
+- **Visual representation**: Toggle avatar mode to see Mario respond with lip-synced video
+- Custom domain: AI consulting instead of telecom customer service
+
+### 2. Chat-Supervisor (Voice Only)
+A realtime-based chat agent interacts with the user and handles basic tasks, while a more intelligent, text-based supervisor model (e.g., `gpt-4.1`) is used extensively for tool calls and more complex responses. This approach provides an easy onramp and high-quality answers, with a small increase in latency.
+
+### 3. Sequential Handoff
+Specialized agents (powered by realtime api) transfer the user between them to handle specific user intents. This is great for customer service, where user intents can be handled sequentially by specialist models that excel in a specific domains. This helps avoid the model having all instructions and tools in a single agent, which can degrade performance.
 
 ## Setup
 
+### Quick Start
 - This is a Next.js typescript app. Install dependencies with `npm i`.
-- Add your `OPENAI_API_KEY` to your env. Either add it to your `.bash_profile` or equivalent, or copy `.env.sample` to `.env` and add it there.
+- Copy `.env.sample` to `.env` and add your API keys:
+  - **Required**: `OPENAI_API_KEY` (for voice and intelligence)
+  - **Optional**: `HEYGEN_API_KEY` (for avatar mode - get from https://app.heygen.com/settings/api)
 - Start the server with `npm run dev`
-- Open your browser to [http://localhost:3000](http://localhost:3000). It should default to the `chatSupervisor` Agent Config.
+- Open your browser to [http://localhost:3000](http://localhost:3000). It should default to the `chatSupervisor` Agent Config with Mario.
 - You can change examples via the "Scenario" dropdown in the top right.
+
+### Avatar Mode
+- Check the **"HeyGen Avatar"** checkbox to enable visual avatar mode
+- Mario will appear on screen and respond with lip-synced video
+- Voice input still works - OpenAI handles the intelligence, HeyGen provides the visual representation
+- Toggle back to voice-only mode anytime
+
+**Note**: HeyGen requires a paid plan for production use. Free tier has limited credits (10 credits / 50 minutes).
 
 # Agentic Pattern 1: Chat-Supervisor
 
