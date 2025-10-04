@@ -17,8 +17,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Architecture Overview
 
-### OpenAI Agents SDK Integration
-This is a Next.js application built on the OpenAI Agents SDK demonstrating voice-based AI agent patterns. The project showcases two main agentic patterns:
+### Core Technology Stack
+This is a Next.js application combining three major technologies:
+1. **OpenAI Agents SDK** - Agent orchestration and tool execution
+2. **OpenAI Realtime API** - Low-latency voice interaction via WebRTC
+3. **HeyGen Streaming Avatar SDK** - Visual avatar with lip-sync (optional)
+
+The project demonstrates voice-based AI agent patterns with optional visual representation.
 
 1. **Chat-Supervisor Pattern** (`src/app/agentConfigs/chatSupervisor/`):
    - Realtime chat agent handles immediate responses and basic tasks
@@ -102,19 +107,20 @@ The application uses `gpt-realtime` model by default. Model references are in:
 
 ## HeyGen Avatar Integration
 
-This repository includes an integration with HeyGen's Streaming Avatar SDK for visual avatar representation. The integration uses a **dual-mode architecture**:
+This repository includes integration with HeyGen's Streaming Avatar SDK for visual avatar representation. The integration uses a **dual-mode architecture** that can be toggled via UI checkbox:
 
 ### Two Operating Modes
 
 **Standard Voice Mode** (Avatar disabled):
-- User speaks → OpenAI Realtime → OpenAI voice output
-- Normal voice conversation with audio playback
+- User speaks → OpenAI Realtime API → OpenAI voice output
+- Traditional voice-only conversation with audio playback
 
 **Avatar Mode** (Avatar enabled):
-- User speaks → OpenAI Realtime (text processing) → HeyGen Avatar (voice + visual)
-- OpenAI audio output is muted
-- Avatar provides visual lip-sync with voice
-- Microphone input remains active for voice interaction
+- User speaks → OpenAI Realtime API (STT + agent logic) → HeyGen Avatar SDK (TTS + video)
+- OpenAI handles: Speech recognition, agent intelligence, tool calls, text response generation
+- HeyGen handles: Text-to-speech with lip-synced video output
+- OpenAI audio output is muted, avatar provides both voice and visual
+- Microphone input remains active through OpenAI SDK
 
 ### Architecture Pattern
 
@@ -130,6 +136,7 @@ The integration follows this flow:
 - Handles WebRTC connection to HeyGen streaming service
 - Provides event listeners for avatar state (talking, ready, disconnected)
 - Exposes `speak()` method to send text for avatar vocalization
+- **Critical**: Waits for `STREAM_READY` event before attaching video stream (prevents black screen issues)
 
 **Token Generation** (`src/app/api/get-access-token/route.ts`):
 - Server-side API endpoint for generating HeyGen session tokens
@@ -159,7 +166,11 @@ Get your HeyGen API key from: https://app.heygen.com/settings/api
 - Voice emotion: `VoiceEmotion.FRIENDLY`
 - Voice rate: 1.0 (normal speed)
 
-**Available Avatars**: See HeyGen API response in `/api/streaming.avatar.list` or check `HEYGEN_INTEGRATION.md` for full list
+**Finding Avatars**:
+- Use `/api/list-avatars` endpoint (created for this project)
+- Check HeyGen dashboard at https://app.heygen.com/streaming-avatar
+- See `HEYGEN_INTEGRATION.md` for detailed avatar information
+- **Important**: Not all avatar IDs work reliably - test before using in production
 
 ### Integration Points
 
